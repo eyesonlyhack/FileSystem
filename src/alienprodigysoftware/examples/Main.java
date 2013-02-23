@@ -87,7 +87,7 @@ public class Main
 		AmazonS3 s3 = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
 
         String bucketName = "grantwoodford";
-        String key = "home/eyesonlyhack/Alien Prodigy Software/website content.odt";
+        String key = "home/grant/Alien Prodigy Software/website content.odt";
         
         try
         {
