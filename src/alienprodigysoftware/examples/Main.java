@@ -18,6 +18,9 @@ import java.util.zip.Checksum;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import alienprodigysoftware.Interfaces.IFileStore;
+import alienprodigysoftware.filemanagement.LocalFileStore;
+
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
@@ -43,9 +46,16 @@ public class Main
 	 */
 	public static void main(String[] args)
 	{
-		testHashing();
+		//testHashing();
+		
+		List<String> directories = new ArrayList<String>();
+		directories.add("/home/eyesonlyhack/IdeaProjects");
+		
+		IFileStore localFileStore = new LocalFileStore(directories);
+		
+		
+		System.out.println("done");
 	}
-	
 	
 	public static File FetchFile(String filePath)
 	{
