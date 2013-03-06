@@ -32,14 +32,32 @@ public class LocalFileStore implements IFileStore
 	@Override
 	public boolean BackupTo(IFileStore fileStore)
 	{
+		int failedUploadCount = 0;
+		int successfullUploadCount = 0;
+				
 		for (File file : this.FilesList())
 		{
+			// debug line
+			System.out.println("local: " + this.GetFileHash(file.getAbsolutePath()));
+			System.out.println("external: " + fileStore.GetFileHash(file.getAbsolutePath()));
+					
 			// Check if file already exists 
-			if (fileStore.GetFileHash(file) != this.GetFileHash(FetchFile(file.getAbsolutePath())))
+			if (fileStore.GetFileHash(file.getAbsolutePath()) != this.GetFileHash(file.getAbsolutePath()))
 			{
-				
+				if (fileStore.AddFile(file))
+				{
+					successfullUploadCount++;
+				}
+				else
+				{
+					failedUploadCount++;
+					System.out.println("Failed Upload for: " + file.getAbsolutePath());
+				}
 			}
 		}
+		
+		System.out.println("Failed Uploads: " + failedUploadCount);
+		System.out.println("Successfull Uploads: " + successfullUploadCount);
 		
 		return false;
 	}
@@ -107,5 +125,12 @@ public class LocalFileStore implements IFileStore
         }
 		
 		return md5Hex;
+	}
+
+	@Override
+	public boolean AddFile(File file)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

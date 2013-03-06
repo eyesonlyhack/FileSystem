@@ -73,36 +73,7 @@ public class Main
 		File file = new File(filePath);		
 		return file;
 	}
-	
-	public static Boolean UploadToS3(File filePath)
-	{
-		Boolean uploadFailed = false;
-		AmazonS3 s3 = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
-
-        String bucketName = "grantwoodford";
-        
-        try
-        {
-        	String amazonFileNameKey = filePath.getAbsolutePath();
-        	
-        	// amazon file path cannot start with "/"
-        	if (amazonFileNameKey.startsWith("/"))
-        	{
-        		amazonFileNameKey = amazonFileNameKey.substring(1, amazonFileNameKey.length() - 1);
-        	}
-        	
-            // Upload file
-            s3.putObject(new PutObjectRequest(bucketName, amazonFileNameKey, FetchFile(filePath.getAbsolutePath())));
-        }
-        catch (Exception e)
-        {
-        	uploadFailed = true;
-        	System.out.println(e.getMessage());
-        }
-        
-        return uploadFailed;
-	}
-	
+		
 	public static void AmazonS3Sync()
 	{
 		AmazonS3 s3 = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
