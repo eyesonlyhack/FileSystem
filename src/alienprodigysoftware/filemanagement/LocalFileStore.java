@@ -4,6 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
+
 import alienprodigysoftware.Interfaces.IFileStore;
 
 public class LocalFileStore implements IFileStore
@@ -30,7 +34,11 @@ public class LocalFileStore implements IFileStore
 	{
 		for (File file : this.FilesList())
 		{
-			
+			// Check if file already exists 
+			if (fileStore.GetFileHash(file) != this.GetFileHash(FetchFile(file.getAbsolutePath())))
+			{
+				
+			}
 		}
 		
 		return false;
@@ -51,19 +59,17 @@ public class LocalFileStore implements IFileStore
 		return returnFilesList;
 	}
 
-//	private static File FetchFile(String filePath)
-//	{
-//		File file = new File(filePath);		
-//		return file;
-//	}
-	
-
+	private static File FetchFile(String filePath)
+	{
+		File file = new File(filePath);		
+		return file;
+	}
 	
 	private static List<File> GetFilesList(String directoryPath)
 	{
 		List<File> filesList = new ArrayList<File>();
 		
-		File folder = new File(directoryPath);
+		File folder = FetchFile(directoryPath);
 
 		File[] listOfFiles = folder.listFiles();
 		
@@ -81,5 +87,25 @@ public class LocalFileStore implements IFileStore
 		}
 		
 		return filesList;
+	}
+
+	@Override
+	public String GetFileHash(String filePath)
+	{
+		String md5Hex = null;
+		
+		try
+		{
+			File localFile = FetchFile(filePath);
+			
+			HashCode localFileMD5 = Files.hash(localFile, Hashing.md5());
+	        md5Hex = localFileMD5.toString();
+		}
+		catch (Exception e)
+        {
+        	System.out.println(e.getMessage());
+        }
+		
+		return md5Hex;
 	}
 }

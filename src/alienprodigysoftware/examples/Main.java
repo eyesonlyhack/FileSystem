@@ -153,7 +153,6 @@ public class Main
             System.out.println(md.getETag());
             
             HashCode md5 = Files.hash(file, Hashing.md5());
-            byte[] md5Bytes = md5.asBytes();
             String md5Hex = md5.toString();
             
             System.out.println(md5Hex);

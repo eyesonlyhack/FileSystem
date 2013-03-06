@@ -1,8 +1,7 @@
 package alienprodigysoftware.Interfaces;
 
-import java.util.List;
-
 public interface IFileStore 
 {
 	boolean BackupTo(IFileStore fileStore);
+	String GetFileHash(String filePath);
 }
