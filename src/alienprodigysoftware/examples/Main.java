@@ -19,6 +19,7 @@ import java.util.zip.Checksum;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import alienprodigysoftware.Interfaces.IFileStore;
+import alienprodigysoftware.filemanagement.AmazonFileStore;
 import alienprodigysoftware.filemanagement.LocalFileStore;
 
 import com.amazonaws.AmazonClientException;
@@ -51,10 +52,20 @@ public class Main
 		List<String> directories = new ArrayList<String>();
 		directories.add("/home/eyesonlyhack/IdeaProjects");
 		
-		IFileStore localFileStore = new LocalFileStore(directories);
+		String buckedName = "grantwoodford";
+		String credentialsProvider = "AwsCredentials.properties";
 		
+		IFileStore localFileStore = new LocalFileStore(directories);
+		IFileStore amazonS3FileStore = new AmazonFileStore(buckedName, credentialsProvider);
+		
+		localFileStore.BackupTo(amazonS3FileStore);
 		
 		System.out.println("done");
+		
+//		for (File f : GetFilesList("/home/eyesonlyhack/IdeaProjects"))
+//		{
+//			System.out.println(f.getAbsolutePath());
+//		}
 	}
 	
 	public static File FetchFile(String filePath)
