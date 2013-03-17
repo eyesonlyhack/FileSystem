@@ -47,7 +47,7 @@ public class Main
 	 */
 	public static void main(String[] args)
 	{
-		//testHashing();
+		//testHashing();test
 		
 		List<String> directories = new ArrayList<String>();
 		directories.add("/home/eyesonlyhack/IdeaProjects");
