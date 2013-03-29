@@ -26,11 +26,6 @@ public class AppConfig
 	    	{
 	           //load a properties file
 	    		this._settingsFile.load(new FileInputStream(getSettingsPath()));
-	 
-	           //get the property value and print it out
-	            System.out.println(this._settingsFile.getProperty("database"));
-	    		System.out.println(this._settingsFile.getProperty("dbuser"));
-	    		System.out.println(this._settingsFile.getProperty("dbpassword"));
 	    	} 
 	    	catch (FileNotFoundException ex)
 	    	{
@@ -52,10 +47,10 @@ public class AppConfig
     	try 
     	{
     		//set the properties value
-    		prop.setProperty("database", "localhost");
-    		prop.setProperty("dbuser", "mkyong");
-    		prop.setProperty("dbpassword", "password");
- 
+    		prop.setProperty("syncfolders", "");
+    		prop.setProperty("amazonaccesskeyid", "");
+    		prop.setProperty("amazonsecretaccesskey", "");
+    		prop.setProperty("amazonbucketbucket", "");
     		//save properties to project root folder
     		prop.store(new FileOutputStream(getSettingsPath()), null);
 

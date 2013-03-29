@@ -20,6 +20,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import alienprodigysoftware.Configuration.AppConfig;
 import alienprodigysoftware.Interfaces.IFileStore;
+import alienprodigysoftware.backupsystem.BackupProcessor;
 import alienprodigysoftware.filemanagement.AmazonFileStore;
 import alienprodigysoftware.filemanagement.LocalFileStore;
 
@@ -48,25 +49,8 @@ public class Main
 	 */
 	public static void main(String[] args)
 	{
-		AppConfig appconfig = new AppConfig("config.properties");
-		System.out.println(appconfig.GetProperty("database"));
-//		List<String> directories = new ArrayList<String>();
-//		directories.add("/home/eyesonlyhack/Documents/My Pictures");
-//		
-//		String buckedName = "grantwoodford";
-//		String credentialsProvider = "AwsCredentials.properties";
-//		
-//		IFileStore localFileStore = new LocalFileStore(directories);
-//		IFileStore amazonS3FileStore = new AmazonFileStore(buckedName, credentialsProvider);
-//		
-//		localFileStore.BackupTo(amazonS3FileStore);
-//		
-//		System.out.println("done");
-//		
-//		for (File f : GetFilesList("/home/eyesonlyhack/IdeaProjects"))
-//		{
-//			System.out.println(f.getAbsolutePath());
-//		}
+		BackupProcessor backup = new BackupProcessor();
+		backup.ProcessAmazonS3Backup();
 	}
 	
 	public static File FetchFile(String filePath)

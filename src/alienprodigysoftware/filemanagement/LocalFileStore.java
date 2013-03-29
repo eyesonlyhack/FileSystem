@@ -37,12 +37,15 @@ public class LocalFileStore implements IFileStore
 				
 		for (File file : this.FilesList())
 		{
+			String localFileHash = this.GetFileHash(file.getAbsolutePath());
+			String externalFileHash = fileStore.GetFileHash(file.getAbsolutePath());
+			
 			// debug line
-			System.out.println("local: " + this.GetFileHash(file.getAbsolutePath()));
-			System.out.println("external: " + fileStore.GetFileHash(file.getAbsolutePath()));
+			System.out.println("local: " + localFileHash);
+			System.out.println("external: " + externalFileHash);
 					
 			// Check if file already exists 
-			if (fileStore.GetFileHash(file.getAbsolutePath()) != this.GetFileHash(file.getAbsolutePath()))
+			if (localFileHash != externalFileHash)
 			{
 				if (fileStore.AddFile(file))
 				{

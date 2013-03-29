@@ -2,6 +2,7 @@ TODO items
 
 Urgent:
 Setup app.settings, syncfolders property
+Setup to use own home/username/.FMS
 Create assembly version control file/setup
 
 Medium:
@@ -9,6 +10,7 @@ Add encryption layer
 
 Low:
 Create simple GUI
+Think of better name
 
 DONE:
 

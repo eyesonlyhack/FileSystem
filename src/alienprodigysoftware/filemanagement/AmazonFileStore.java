@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -18,6 +20,18 @@ public class AmazonFileStore implements IFileStore
 {
 	private String _bucketName;
 	private AmazonS3 _amazonS3drive;
+	private Boolean _doesBucketExist = null;
+	
+	private Boolean getDoesBucketExist()
+	{
+		if (this._doesBucketExist == null)
+		{
+			// this check is expensive, so make sure we only do it once
+			this._doesBucketExist = this.getAmazonS3drive().doesBucketExist(this.getBucketName());
+		}
+		
+		return this._doesBucketExist;
+	}
 	
 	private String getBucketName()
 	{
@@ -34,15 +48,30 @@ public class AmazonFileStore implements IFileStore
 		return this._amazonS3drive;
 	}
 	
-	private void setAmazonS3drive(String credentialsProvider)
+	private void setAmazonS3drive(final String amazonAccessKeyID, final String amazonSecretKey)
 	{
-		this._amazonS3drive = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider(credentialsProvider));
+		AWSCredentials awsc = new AWSCredentials()
+		{			
+			@Override
+			public String getAWSSecretKey()
+			{
+				return amazonSecretKey;
+			}
+			
+			@Override
+			public String getAWSAccessKeyId()
+			{
+				return amazonAccessKeyID;
+			}
+		};
+		
+		this._amazonS3drive = new AmazonS3Client(awsc);
 	}
 	
-	public AmazonFileStore(String bucketName, String credentialsProvider)
+	public AmazonFileStore(String bucketName, String amazonAccessKeyID, String amazonSecretKey)
 	{
 		setBucketName(bucketName);
-		setAmazonS3drive(credentialsProvider);
+		setAmazonS3drive(amazonAccessKeyID, amazonSecretKey);
 	}
 	
 	@Override
@@ -57,6 +86,11 @@ public class AmazonFileStore implements IFileStore
 	@Override
 	public String GetFileHash(String filePath)
 	{
+		if (filePath.startsWith("/"))
+    	{
+			filePath = filePath.substring(1, filePath.length());
+    	}
+		
 		try
 		{
 			ObjectMetadata md = this.getAmazonS3drive().getObjectMetadata(this.getBucketName(), filePath);
@@ -83,11 +117,17 @@ public class AmazonFileStore implements IFileStore
         {
         	String amazonFileNameKey = file.getAbsolutePath();
         	
-//        	// amazon file path cannot start with "/"
-//        	if (amazonFileNameKey.startsWith("/"))
-//        	{
-//        		amazonFileNameKey = amazonFileNameKey.substring(1, amazonFileNameKey.length() - 1);
-//        	}
+        	// add bucket if it does not exist
+        	if (!this.getDoesBucketExist())
+        	{
+        		this.getAmazonS3drive().createBucket(this.getBucketName());
+        	}
+        	
+        	// amazon file path cannot start with "/"
+        	if (amazonFileNameKey.startsWith("/"))
+        	{
+        		amazonFileNameKey = amazonFileNameKey.substring(1, amazonFileNameKey.length());
+        	}
  	
             // Upload file
             this.getAmazonS3drive().putObject(new PutObjectRequest(this.getBucketName(), amazonFileNameKey, file));
