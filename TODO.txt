@@ -1,0 +1,18 @@
+TODO items
+
+Urgent:
+Setup app.settings, syncfolders property
+Create assembly version control file/setup
+
+Medium:
+Add encryption layer
+
+Low:
+Create simple GUI
+
+DONE:
+
+v0.0.0.1:
+- setup with GIT
+- hooked up with AmazonS3
+- decided on Interface/Class design to be used
