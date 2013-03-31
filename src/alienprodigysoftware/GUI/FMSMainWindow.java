@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -25,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import alienprodigysoftware.Configuration.AppConfig;
+import alienprodigysoftware.Configuration.AssemblyVersion;
 import alienprodigysoftware.Configuration.BackupProfile;
 import alienprodigysoftware.backupsystem.BackupProcessor;
 import javax.swing.JScrollPane;
@@ -169,10 +171,16 @@ public class FMSMainWindow
 		JMenu mnTestItem = new JMenu("test item");
 		mnPreferences.add(mnTestItem);
 		
-		JMenu mnTest = new JMenu("test");
+		JMenu mnTest = new JMenu("Help");
 		menuBar.add(mnTest);
 		
-		JMenuItem mntmGoto = new JMenuItem("goto");
+		JMenuItem mntmGoto = new JMenuItem("About");
+		mntmGoto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(frame, "Current version: " + AssemblyVersion.AssemblyVersion
+													+"\nDeveloper: Grant Woodford"); 
+			}
+		});
 		mnTest.add(mntmGoto);
 	}
 	

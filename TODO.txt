@@ -1,16 +1,22 @@
 TODO items
 
 Urgent:
-Create simple GUI
-Save/Edit config file
-Backup from GUI
+add better configuration format (multiple accounts settings)
+Backup from GUI 
+Progress bar
+Add/remove account
 
 Medium:
-Create assembly version control file/setup
+Space already used
 Setup to use own home/username/.FMS
 Add encryption layer
 
 Low:
+add ssh
+add ftp
+Add google drive
+add skydrive
+add dropbox
 Think of better name
 Add sync functionality
 
@@ -20,3 +26,7 @@ v0.0.0.1:
 - setup with GIT
 - hooked up with AmazonS3
 - decided on Interface/Class design to be used
+- Research GUI technologies (picked WindowBuilder, Swing)
+- Created initial GUI setup
+- Create assembly version control file/setup
+- Created about popup
