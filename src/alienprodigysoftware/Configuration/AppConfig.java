@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class AppConfig 
@@ -72,5 +74,21 @@ public class AppConfig
 	public String GetProperty(String propertyName)
 	{
 		return getSettingsFile().getProperty(propertyName);
+	}
+	
+	public List<BackupProfile> getBackupProfiles()
+	{
+		List<BackupProfile> backupProfiles = new ArrayList<BackupProfile>();
+		
+		// get values from config file
+		BackupProfile config = new BackupProfile();
+		config.set_BackupPaths(getSettingsFile().getProperty("syncfolders"));
+		config.set_Username(getSettingsFile().getProperty("amazonaccesskeyid"));
+		config.set_Password(getSettingsFile().getProperty("amazonsecretaccesskey"));
+		config.set_Bucket(getSettingsFile().getProperty("amazonbucketbucket"));
+		
+		backupProfiles.add(config);
+		
+		return backupProfiles;
 	}
 }

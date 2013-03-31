@@ -1,16 +1,18 @@
 TODO items
 
 Urgent:
-Setup app.settings, syncfolders property
-Setup to use own home/username/.FMS
-Create assembly version control file/setup
+Create simple GUI
+Save/Edit config file
+Backup from GUI
 
 Medium:
+Create assembly version control file/setup
+Setup to use own home/username/.FMS
 Add encryption layer
 
 Low:
-Create simple GUI
 Think of better name
+Add sync functionality
 
 DONE:
 
