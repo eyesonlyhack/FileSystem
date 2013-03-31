@@ -30,7 +30,6 @@ public class BackupProfileJDialog extends JDialog
 	private JTextField passwordtextField;
 	private JTextField bucketNameTextField;
 	private JEditorPane filePathsEditorPane;
-	private AppConfig appConfig;
 	private static int BackupProfileIndex;
 	
 	/**
@@ -55,8 +54,6 @@ public class BackupProfileJDialog extends JDialog
 	 */
 	public BackupProfileJDialog()
 	{
-		appConfig = new AppConfig("config.properties");
-		
 		setBounds(100, 100, 450, 353);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -116,7 +113,16 @@ public class BackupProfileJDialog extends JDialog
 				JButton saveButton = new JButton("Save");
 				saveButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						SaveProfile(BackupProfileIndex);
+						BackupProfile profile = new BackupProfile();
+						profile.set_BackupProfileIndex(BackupProfileIndex);
+						profile.set_Username(userNameTextField.getText());
+						profile.set_Password(passwordtextField.getText());
+						profile.set_Bucket(bucketNameTextField.getText());
+						profile.set_BackupPaths(filePathsEditorPane.getText());
+						
+						SaveProfile(profile);
+						
+						setVisible(false);
 					}
 				});
 				saveButton.setActionCommand("OK");
@@ -143,7 +149,7 @@ public class BackupProfileJDialog extends JDialog
 
 		if (backupProfileIndex > 0)
 		{
-			List<BackupProfile> profiles = this.appConfig.getBackupProfiles();
+			List<BackupProfile> profiles = AppConfig.getBackupProfiles();
 			this.LoadProfile(profiles.get(backupProfileIndex - 1));
 		}
 		else
@@ -163,19 +169,21 @@ public class BackupProfileJDialog extends JDialog
 	
 	private void ClearProfile()
 	{
-		
+		this.accountTypeComboBox.setSelectedItem("Amazon S3");
+		this.bucketNameTextField.setText("");
+		this.userNameTextField.setText("");
+		this.passwordtextField.setText("");
+		this.filePathsEditorPane.setText("");
 	}
 	
-	private static void SaveProfile(int backupProfileIndex)
+	private static void SaveProfile(BackupProfile profile)
 	{
-		AppConfig appConfig = new AppConfig("config.properties");
-		
 		// for when saving new profile
 		if (BackupProfileIndex <= 0)
 		{
-		    backupProfileIndex = appConfig.getBackupProfiles().size();
+			profile.set_BackupProfileIndex(AppConfig.getBackupProfiles().size());
 		}
 		
-		
+		AppConfig.Save(profile);
 	}
 }

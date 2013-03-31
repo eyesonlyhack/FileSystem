@@ -7,6 +7,11 @@ import javax.swing.JButton;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -70,8 +75,40 @@ public class FMSMainWindow
 	private void initialize()
 	{
 		backupProfileJDialog = new BackupProfileJDialog();
-		appConfig = new AppConfig("config.properties");
-						
+		backupProfileJDialog.addComponentListener(new ComponentListener()
+		{
+			
+			@Override
+			public void componentShown(ComponentEvent arg0)
+			{
+				// TODO Auto-generated method stub
+				System.out.print("test");
+			}
+			
+			@Override
+			public void componentResized(ComponentEvent arg0)
+			{
+				// TODO Auto-generated method stub
+				System.out.print("test");
+			}
+			
+			@Override
+			public void componentMoved(ComponentEvent arg0)
+			{
+				// TODO Auto-generated method stub
+				System.out.print("test");
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent arg0)
+			{
+				// TODO Auto-generated method stub
+				System.out.print("test");
+				LoadConfigurationFile();
+				
+			}
+		});
+			
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 321);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -162,6 +199,7 @@ public class FMSMainWindow
 		}
 		
 		table.setModel(profileModel);
+		table.repaint();
 	}
 	
 	private static void PerformBackup()

@@ -10,28 +10,27 @@ import java.util.Properties;
 
 public class AppConfig 
 {
-	private Properties _settingsFile;
-	private String _settingsPath;
+	private static Properties _settingsFile;
 	
-	private String getSettingsPath()
+	private static String getSettingsPath()
 	{
-		return this._settingsPath;
+		return "config.properties";
 	}
 	
-	private Properties getSettingsFile()
+	private static Properties getSettingsFile()
 	{
-		if (this._settingsFile == null)
+		if (_settingsFile == null)
 		{
-			this._settingsFile = new Properties();
+			_settingsFile = new Properties();
 			 
 	    	try 
 	    	{
 	           //load a properties file
-	    		this._settingsFile.load(new FileInputStream(getSettingsPath()));
+	    	   _settingsFile.load(new FileInputStream(getSettingsPath()));
 	    	} 
 	    	catch (FileNotFoundException ex)
 	    	{
-	    		this._settingsFile = this.CreateConfigurationFile();
+	    		_settingsFile = CreateConfigurationFile();
 	    	}
 	    	catch (IOException ex) 
 	    	{
@@ -39,12 +38,13 @@ public class AppConfig
 	        }
 		}
 		
-		return this._settingsFile;
+		return _settingsFile;
 	}
 	
-	private Properties CreateConfigurationFile()
+	private static Properties CreateConfigurationFile()
 	{
-		Properties prop = new Properties();
+		// fetch existing file
+		Properties prop = getSettingsFile();
 		 
     	try 
     	{
@@ -66,17 +66,47 @@ public class AppConfig
     	return null;
 	}
 	
-	public AppConfig(String settingsPath)
+	private static void SaveConfigurationFile(BackupProfile profile)
 	{
-		this._settingsPath = settingsPath;
+		Properties prop = new Properties();
+		 
+    	try 
+    	{
+    		if (profile.get_BackupProfileIndex() == 1)
+    		{
+	    		//set the properties value
+	    		prop.setProperty("syncfolders", profile.get_BackupPaths().replace("\n", ";"));
+	    		prop.setProperty("amazonaccesskeyid", profile.get_Username());
+	    		prop.setProperty("amazonsecretaccesskey", profile.get_Password());
+	    		prop.setProperty("amazonbucketbucket", profile.get_Bucket());
+    		}
+    		else
+    		{
+    			//set the properties value
+	    		prop.setProperty(profile.get_BackupProfileIndex() + "syncfolders", profile.get_BackupPaths().replace("\n", ";"));
+	    		prop.setProperty(profile.get_BackupProfileIndex() + "amazonaccesskeyid", profile.get_Username());
+	    		prop.setProperty(profile.get_BackupProfileIndex() + "amazonsecretaccesskey", profile.get_Password());
+	    		prop.setProperty(profile.get_BackupProfileIndex() + "amazonbucketbucket", profile.get_Bucket());
+    		}
+    		
+    		//save properties to project root folder
+    		prop.store(new FileOutputStream(getSettingsPath()), null);   
+    	} 
+    	catch (IOException ex) 
+    	{
+    		ex.printStackTrace();
+        }
+    	
+    	// need to reload settings
+    	_settingsFile = null;
 	}
-	
-	public String GetProperty(String propertyName)
+
+	public static String GetProperty(String propertyName)
 	{
 		return getSettingsFile().getProperty(propertyName);
 	}
 	
-	public List<BackupProfile> getBackupProfiles()
+	public static List<BackupProfile> getBackupProfiles()
 	{
 		List<BackupProfile> backupProfiles = new ArrayList<BackupProfile>();
 		
@@ -90,5 +120,10 @@ public class AppConfig
 		backupProfiles.add(config);
 		
 		return backupProfiles;
+	}
+
+	public static void Save(BackupProfile profile)
+	{
+		SaveConfigurationFile(profile);
 	}
 }
