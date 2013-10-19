@@ -1,6 +1,7 @@
 TODO items
 
 Urgent:
+integrate with json config file
 add better configuration format (multiple accounts settings)
 Backup from GUI 
 Progress bar
